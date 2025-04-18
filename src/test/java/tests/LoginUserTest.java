@@ -34,10 +34,21 @@ public class LoginUserTest extends BaseUserTest {
     }
 
     @Test
-    @DisplayName("Авторизация с неверными учетными данными")
+    @DisplayName("Авторизация с неверным паролем")
     @Description("Проверяем что система возвращает ошибку при попытке авторизации с неверным паролем")
     public void loginWithWrongCredentialsTest() {
         user.setPassword("wrongPassword");
+        Response loginResponse = loginUserStep(user);
+        verifyStatusCodeStep(loginResponse, HttpStatus.SC_UNAUTHORIZED);
+        verifyFieldStep(loginResponse, "success", equalTo(false));
+        verifyFieldStep(loginResponse, "message", equalTo(UserConstants.WRONG_CREDENTIALS_MESSAGE));
+    }
+
+    @Test
+    @DisplayName("Авторизация с неверным логином")
+    @Description("Проверяем, что система возвращает ошибку при попытке авторизации с неверным email")
+    public void loginWithWrongLoginTest() {
+        user.setEmail("wrongEmail@example.com");
         Response loginResponse = loginUserStep(user);
         verifyStatusCodeStep(loginResponse, HttpStatus.SC_UNAUTHORIZED);
         verifyFieldStep(loginResponse, "success", equalTo(false));

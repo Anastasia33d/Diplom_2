@@ -52,4 +52,26 @@ public class CreateUserTest extends BaseUserTest {
         verifyFieldStep(userCreateResponse, "success", equalTo(false));
         verifyFieldStep(userCreateResponse, "message", equalTo(UserConstants.REQUIRED_FIELD_MESSAGE));
     }
+
+    @Test
+    @DisplayName("Создание пользователя без пароля")
+    @Description("Проверка невозможности создания пользователя без указания обязательного поля password")
+    public void createUserWithoutPasswordTest() {
+        userCreateResponse = createUserStep(UserGenerator.getUserWithoutPassword());
+
+        verifyStatusCodeStep(userCreateResponse, HttpStatus.SC_FORBIDDEN);
+        verifyFieldStep(userCreateResponse, "success", equalTo(false));
+        verifyFieldStep(userCreateResponse, "message", equalTo(UserConstants.REQUIRED_FIELD_MESSAGE));
+    }
+
+    @Test
+    @DisplayName("Создание пользователя без имени")
+    @Description("Проверка невозможности создания пользователя без указания обязательного поля name")
+    public void createUserWithoutNameTest() {
+        userCreateResponse = createUserStep(UserGenerator.getUserWithoutName());
+
+        verifyStatusCodeStep(userCreateResponse, HttpStatus.SC_FORBIDDEN);
+        verifyFieldStep(userCreateResponse, "success", equalTo(false));
+        verifyFieldStep(userCreateResponse, "message", equalTo(UserConstants.REQUIRED_FIELD_MESSAGE));
+    }
 }
